@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; font-src 'self'">
+<link rel="stylesheet" href="style.css">
+<title>بیاوصل شو</title>
+</head>
+<body>
+<div class="shell">
+ <aside class="side">
+  <div class="brand"><span class="logo-orb"></span><b>بیاوصل شو</b></div>
+  <nav>
+   <button class="nav on" data-p="dash"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>داشبورد</button>
+   <button class="nav" data-p="account"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>حساب کاربری</button>
+   <button class="nav" data-p="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2-1.2L14 3h-4l-.4 2.7a7 7 0 0 0-2 1.2l-2.3-1-2 3.4 2 1.5a7 7 0 0 0 0 2.4l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2 1.2L10 21h4l.4-2.7a7 7 0 0 0 2-1.2l2.3 1 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg>تنظیمات</button>
+  </nav>
+  <div class="conn">
+   <div class="pill"><i id="d-net"></i><span>اینترنت</span><em id="t-net"></em></div>
+   <div class="pill"><i id="d-srv"></i><span>سرور</span><em id="t-srv"></em></div>
+  </div>
+ </aside>
+
+ <main>
+  <section id="p-dash" class="page on">
+   <div class="card hero">
+    <canvas id="orbs"></canvas>
+    <span class="node nl">سرور</span><span class="node nr">کامپیوتر شما</span>
+    <div class="hero-top"><span class="chip" id="chip">آمادهٔ اتصال</span><span class="mut" id="msg"></span></div>
+    <div class="hero-bot"><div class="addr" id="addr" dir="ltr"></div><button class="btn sm ghost" id="copy" hidden>کپی</button></div>
+   </div>
+
+   <div class="stats">
+    <div class="card stat"><span class="mut">پینگ</span><b id="s-ping">—</b><small>ms</small></div>
+    <div class="card stat down"><span class="mut">دانلود</span><b id="s-down">۰</b><small id="u-down" dir="ltr">KB/s</small><em id="tot-down" class="mut"></em></div>
+    <div class="card stat up"><span class="mut">آپلود</span><b id="s-up">۰</b><small id="u-up" dir="ltr">KB/s</small><em id="tot-up" class="mut"></em></div>
+    <div class="card stat"><span class="mut">اتصال فعال</span><b id="s-conns">۰</b><small>کاربر</small></div>
+   </div>
+
+   <div class="card" id="connect">
+    <div class="row3">
+     <div><label for="port">پورت روی این کامپیوتر</label><input id="port" dir="ltr" inputmode="numeric" placeholder="3000" maxlength="5"></div>
+     <div><label for="lhost">آدرس (اختیاری)</label><input id="lhost" dir="ltr" placeholder="127.0.0.1"></div>
+     <button class="btn" id="go">اتصال</button>
+    </div>
+    <p class="err" id="err"></p>
+   </div>
+   <div class="card" id="needlogin" hidden>
+    <b>برای شروع وارد شوید</b>
+    <p class="mut">مرورگر باز می‌شود؛ بعد از ورود یا ثبت‌نام، برنامه خودکار وصل می‌شود.</p>
+    <button class="btn" id="login1">ورود با مرورگر</button>
+    <p class="err" id="login-err"></p>
+   </div>
+  </section>
+
+  <section id="p-account" class="page">
+   <div id="acc-out" class="card" hidden>
+    <b>وارد نشده‌اید</b>
+    <p class="mut">برای مدیریت حساب ابتدا وارد شوید.</p>
+    <button class="btn" id="login2">ورود با مرورگر</button>
+   </div>
+   <div id="acc-in" hidden>
+    <div class="card profile"><span class="avatar" id="avatar"></span><div><b id="a-email" dir="ltr"></b><br><span class="chip ok">حساب فعال</span></div>
+     <button class="btn sm ghost" id="site">باز کردن وب‌سایت</button></div>
+    <div class="card">
+     <b>تغییر رمز عبور</b>
+     <div class="row2"><div><label for="op">رمز فعلی</label><input id="op" type="password" dir="ltr"></div>
+     <div><label for="np">رمز جدید (حداقل ۸ کاراکتر)</label><input id="np" type="password" dir="ltr"></div></div>
+     <button class="btn sm" id="chg">ذخیرهٔ رمز جدید</button> <span class="err" id="perr"></span>
+    </div>
+    <div class="card">
+     <b>امنیت</b>
+     <div class="rowbtn"><div><span>خروج از این دستگاه</span><small class="mut">توکن این برنامه حذف می‌شود.</small></div><button class="btn sm ghost" id="logout">خروج</button></div>
+     <div class="rowbtn"><div><span>خروج از همهٔ دستگاه‌ها</span><small class="mut">همهٔ نشست‌ها و برنامه‌های وارد شده بسته می‌شوند.</small></div><button class="btn sm ghost" id="revoke">خروج از همه</button></div>
+    </div>
+    <div class="card danger">
+     <b>حذف حساب</b><p class="mut">این کار برگشت‌پذیر نیست. برای تأیید رمز عبور را وارد کنید.</p>
+     <div class="rowbtn"><input id="dp" type="password" dir="ltr" placeholder="رمز عبور"><button class="btn sm bad" id="del">حذف حساب</button></div>
+    </div>
+   </div>
+  </section>
+
+  <section id="p-settings" class="page">
+   <div class="card">
+    <b>ظاهر</b>
+    <div class="rowbtn"><span>تم برنامه</span>
+     <div class="seg" id="theme"><button data-v="dark">تیره</button><button data-v="light">روشن</button><button data-v="system">سیستم</button></div></div>
+   </div>
+   <div class="card">
+    <b>اتصال</b>
+    <div class="rowbtn"><div><span>اتصال مجدد خودکار</span><small class="mut">اگر ارتباط قطع شد، دوباره تلاش کن.</small></div><label class="sw"><input type="checkbox" id="st-reconnect"><i></i></label></div>
+    <div class="rowbtn"><div><span>اتصال خودکار هنگام باز شدن برنامه</span><small class="mut">آخرین پورت استفاده‌شده وصل می‌شود.</small></div><label class="sw"><input type="checkbox" id="st-auto"><i></i></label></div>
+    <div class="rowbtn"><div><span>اجرا هنگام روشن شدن ویندوز</span></div><label class="sw"><input type="checkbox" id="st-start"><i></i></label></div>
+    <div class="rowbtn"><div><span>آدرس پیش‌فرض سرویس محلی</span></div><input id="st-host" dir="ltr" placeholder="127.0.0.1"></div>
+   </div>
+   <div class="card"><b>دربارهٔ برنامه</b>
+    <div class="rowbtn"><span class="mut">آدرس سرور</span><span dir="ltr" id="st-server"></span></div>
+    <div class="rowbtn"><span class="mut">نسخه</span><span dir="ltr">1.0.0</span></div></div>
+  </section>
+ </main>
+</div>
+<div class="toast" id="toast"></div>
+<script src="orbs.js"></script>
+<script src="renderer.js"></script>
+</body>
+</html>

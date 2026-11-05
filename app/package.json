@@ -1,0 +1,15 @@
+{
+  "name": "biavasl",
+  "productName": "بیاوصل شو",
+  "version": "1.0.0",
+  "description": "بیاوصل شو — اتصال هر پورت به اینترنت",
+  "main": "main.js",
+  "scripts": { "start": "electron .", "build": "electron-builder --win" },
+  "devDependencies": { "electron": "^33.0.0", "electron-builder": "^25.0.0" },
+  "build": {
+    "appId": "ir.biavasl.app",
+    "productName": "بیاوصل شو",
+    "files": ["**/*"],
+    "win": { "target": "nsis" }
+  }
+}

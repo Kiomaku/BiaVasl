@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>بیاوصل شو</title>
+<style>
+@font-face{font-family:"Yekan Bakh";font-weight:100 900;font-display:swap;src:url(/fonts/yekanbakh2.woff2) format("woff2")}
+:root{--bg:#fff;--card:#fff;--c2:#f4f4f5;--line:#e4e4e7;--tx:#11181c;--mut:#71717a;--pri:#006fee;--pri-tx:#fff;--bad:#f31260;--ok:#17c964}
+@media(prefers-color-scheme:dark){:root{--bg:#000;--card:#18181b;--c2:#27272a;--line:#3f3f46;--tx:#ecedee;--mut:#a1a1aa}}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:var(--bg);color:var(--tx);font:400 15px/1.8 "Yekan Bakh",Tahoma,sans-serif}
+main{width:100%;max-width:400px}
+.logo{text-align:center;margin-bottom:24px}
+.logo b{display:block;font-weight:900;font-size:34px;letter-spacing:-.5px}
+.logo span{color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--c2);padding:4px;border-radius:12px;margin-bottom:20px}
+.tabs button{border:0;background:none;color:var(--mut);padding:8px;border-radius:9px;font:inherit;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--card);color:var(--tx);font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+label{display:block;font-size:13px;color:var(--mut);margin:0 4px 4px}
+input{width:100%;background:var(--c2);color:var(--tx);border:2px solid transparent;border-radius:12px;padding:10px 14px;font:inherit;margin-bottom:14px;outline:0;transition:border-color .15s}
+input:focus{border-color:var(--pri)}
+input[dir=ltr]{text-align:left}
+.btn{width:100%;border:0;border-radius:12px;padding:11px;background:var(--pri);color:var(--pri-tx);font:700 15px "Yekan Bakh",Tahoma;cursor:pointer;transition:opacity .15s,transform .1s}
+.btn:hover{opacity:.9}.btn:active{transform:scale(.98)}.btn[disabled]{opacity:.5}
+.btn.ghost{background:var(--c2);color:var(--tx)}
+.err{color:var(--bad);font-size:13px;min-height:22px;margin:-4px 4px 8px}
+.chip{display:inline-block;background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok);border-radius:99px;padding:2px 12px;font-size:13px}
+.box{background:var(--c2);border-radius:12px;padding:12px 14px;margin:14px 0;font-size:13px;color:var(--mut)}
+:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+ <div class="logo"><b>بیاوصل شو</b><span>هر پورتی را به اینترنت وصل کن</span></div>
+ <div class="card" id="auth">
+  <div class="tabs" role="tablist">
+   <button role="tab" id="t-in" aria-selected="true">ورود</button>
+   <button role="tab" id="t-up" aria-selected="false">ثبت‌نام</button>
+  </div>
+  <label for="em">ایمیل</label><input id="em" type="email" dir="ltr" autocomplete="email">
+  <label for="pw">رمز عبور</label><input id="pw" type="password" dir="ltr" autocomplete="current-password">
+  <div class="err" id="err" role="alert"></div>
+  <button class="btn" id="go">ورود</button>
+ </div>
+ <div id="done" hidden>
+  <div class="card">
+   <p style="margin:0"><span class="chip">وارد شدید</span></p>
+   <p id="who" dir="ltr" style="text-align:right;margin:8px 0 0;font-weight:700"></p>
+   <div class="box" id="hint">برنامهٔ «بیاوصل شو» را روی کامپیوتر باز کنید و روی «ورود با مرورگر» بزنید؛ اتصال خودکار انجام می‌شود.</div>
+  </div>
+  <div class="card" id="acct" style="margin-top:14px">
+   <b>تغییر رمز عبور</b>
+   <div style="height:12px"></div>
+   <label for="op">رمز فعلی</label><input id="op" type="password" dir="ltr" autocomplete="current-password">
+   <label for="np">رمز جدید</label><input id="np" type="password" dir="ltr" autocomplete="new-password">
+   <div class="err" id="perr" role="alert"></div>
+   <button class="btn" id="chg">ذخیرهٔ رمز جدید</button>
+   <div style="height:18px"></div>
+   <button class="btn ghost" id="all">خروج از همهٔ دستگاه‌ها</button>
+   <div style="height:8px"></div>
+   <button class="btn ghost" id="out">خروج از این مرورگر</button>
+   <details style="margin-top:18px"><summary style="cursor:pointer;color:var(--bad)">حذف حساب</summary>
+    <div class="box">حذف حساب برگشت‌پذیر نیست. برای تأیید، رمز عبور را وارد کنید.</div>
+    <input id="dp" type="password" dir="ltr" placeholder="رمز عبور">
+    <button class="btn" id="del" style="background:var(--bad)">حذف همیشگی حساب</button>
+   </details>
+  </div>
+ </div>
+</main>
+<script>
+const $=id=>document.getElementById(id),q=new URLSearchParams(location.search);
+const port=+q.get("port"),state=q.get("state"),fromApp=port>=1024&&port<=65535&&/^[\w-]{8,128}$/.test(state||"");
+let mode="in";
+function setMode(m){mode=m;$("t-in").ariaSelected=m=="in";$("t-up").ariaSelected=m=="up";
+ $("go").textContent=m=="in"?"ورود":"ساخت حساب";$("pw").autocomplete=m=="in"?"current-password":"new-password";$("err").textContent=""}
+$("t-in").onclick=()=>setMode("in");$("t-up").onclick=()=>setMode("up");
+async function api(p,b){const r=await fetch("/api/"+p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b||{})});
+ const j=await r.json();if(!r.ok)throw new Error(j.error||"خطا");return j}
+async function after(email){
+ if(fromApp){$("auth").hidden=true;$("done").hidden=false;$("who").textContent=email;$("hint").textContent="در حال بازگشت به برنامه…";
+  try{const t=await api("authorize");location.href=`http://127.0.0.1:${port}/callback?token=${t.token}&email=${encodeURIComponent(t.email)}&state=${encodeURIComponent(state)}`;
+   $("hint").textContent="وصل شد! می‌توانید این صفحه را ببندید و به برنامه برگردید."}catch(e){$("hint").textContent=e.message}
+ }else{$("auth").hidden=true;$("done").hidden=false;$("who").textContent=email}}
+$("go").onclick=async()=>{$("err").textContent="";$("go").disabled=true;
+ try{const j=await api(mode=="in"?"signin":"signup",{email:$("em").value,password:$("pw").value});await after(j.email)}
+ catch(e){$("err").textContent=e.message}$("go").disabled=false};
+document.addEventListener("keydown",e=>{if(e.key=="Enter"&&!$("auth").hidden)$("go").click()});
+$("out").onclick=async()=>{await api("signout");location.href="/"};
+$("all").onclick=async()=>{if(!confirm("از همهٔ دستگاه‌ها (از جمله برنامه) خارج شوید؟"))return;await api("revoke-all");location.href="/"};
+$("chg").onclick=async()=>{$("perr").style.color="var(--bad)";$("perr").textContent="";
+ try{await api("password",{old:$("op").value,new:$("np").value});$("perr").style.color="var(--ok)";$("perr").textContent="رمز عبور تغییر کرد";$("op").value=$("np").value=""}
+ catch(e){$("perr").textContent=e.message}};
+$("del").onclick=async()=>{try{await api("delete-account",{password:$("dp").value});location.href="/"}catch(e){alert(e.message)}};
+fetch("/api/me").then(r=>r.ok?r.json():null).then(j=>{if(j)after(j.email)});
+</script>
+</body>
+</html>
