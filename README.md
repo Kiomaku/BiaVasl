@@ -199,7 +199,7 @@ If your distribution's package manager provides an older Go release, use the off
 Clone your repository or upload the project:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/biavasl.git
+git clone https://github.com/kiomaku/biavasl
 cd biavasl
 ```
 
